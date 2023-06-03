@@ -1,0 +1,11 @@
+[package]
+name = "axum-sqlx"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/AxumCourse/axum-sqlx"
+homepage = "https://axum.rs"
+description = "axum.rs专题：axum使用sqlx"
+
+[dependencies]
