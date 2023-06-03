@@ -3,39 +3,43 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">名称</th>
+      <th scope="col">余额</th>
+      <th scope="col">类型</th>
+      <th scope="col">时间</th>
+      <th scope="col">操作</th>
     </tr>
   </thead>
   <tbody>
+    {%for m in p.data%}
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+      <th scope="row">{{ m.id }}</th>
+      <td>{{ m.name }}</td>
+      <td>{{ m.balance }}</td>
+      <td>{{ m.types }}</td>
+      <td>{{ m.dateline }}</td>
+      <td></td>
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
+    {%endfor%}
   </tbody>
 </table>
 
+{% if p.total_page > 0 %}
 <nav aria-label="Page navigation example">
   <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    {%if p.has_prev()%}
+    <li class="page-item">
+      <a class="page-link" href="?page={{p.page-1}}">上一页</a>
+    </li>
+    {%endif%} {%for i in 0..p.total_page%}
+    <li class="page-item">
+      <a class="page-link" href="?page={{i}}">{{i+1}}</a>
+    </li>
+    {%endfor%} {%if p.has_next()%}
+    <li class="page-item">
+      <a class="page-link" href="?page={{p.page+1}}">下一页</a>
+    </li>
+    {%endif%}
   </ul>
 </nav>
-{%endblock%}
+{%endif%} {%endblock%}

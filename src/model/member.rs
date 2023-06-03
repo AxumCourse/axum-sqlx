@@ -13,6 +13,17 @@ pub enum MemberTypes {
     /// 钻石会员
     Diamond,
 }
+impl std::fmt::Display for MemberTypes {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            &Self::Normal => String::from("普通会员"),
+            &Self::Silver => String::from("白银会员"),
+            &Self::Gold => String::from("黄金会员"),
+            &Self::Diamond => String::from("钻石会员"),
+        };
+        write!(f, "{}", s)
+    }
+}
 
 #[derive(Debug, Default, Deserialize, Serialize, sqlx::FromRow)]
 pub struct Member {
