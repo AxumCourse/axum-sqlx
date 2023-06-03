@@ -9,3 +9,10 @@ homepage = "https://axum.rs"
 description = "axum.rs专题：axum使用sqlx"
 
 [dependencies]
+tokio = {version="1",features=["full"]}
+axum = "0.6"
+serde = {version="1", features=["derive"]}
+chrono = {version="0.4", features=["serde"]}
+sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls", "chrono", "macros" ] }
+dotenv = "0.15"
+config = "0.13"
