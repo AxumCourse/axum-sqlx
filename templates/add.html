@@ -1,0 +1,22 @@
+{% extends "./base.html" %} {%block title%}添加{%endblock%} {%block content%}
+<form method="post" autocomplete="off" action="/add">
+  <div class="mb-3">
+    <label for="name" class="form-label">会员名称</label>
+    <input type="text" class="form-control" id="name" />
+  </div>
+  <div class="mb-3">
+    <label for="balance" class="form-label">账户余额</label>
+    <input type="number" class="form-control" id="balance" />
+  </div>
+  <div class="mb-3">
+    <label for="types" class="form-label">会员类型</label>
+    <select class="form-select" name="types">
+      <option value="Normal">普通会员</option>
+      <option value="Silver">白银会员</option>
+      <option value="Gold">黄金会员</option>
+      <option value="Diamond">钻石会员</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{%endblock%}

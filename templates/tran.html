@@ -1,0 +1,19 @@
+{% extends "./base.html" %} {%block title%}转账{%endblock%} {%block content%}
+<form method="post" autocomplete="off" action="/tran">
+  <div class="mb-3">
+    <label for="from_member" class="form-label">转账人</label>
+    <select class="form-select" name="from_member"></select>
+  </div>
+
+  <div class="mb-3">
+    <label for="to_member" class="form-label">收款人</label>
+    <select class="form-select" name="to_member"></select>
+  </div>
+
+  <div class="mb-3">
+    <label for="amount" class="form-label">转账金额</label>
+    <input type="number" class="form-control" id="amount" />
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{%endblock%}

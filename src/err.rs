@@ -4,26 +4,35 @@ use axum::response::IntoResponse;
 pub enum ErrorKind {
     Database,
     Config,
+    Template,
 }
 
 #[derive(Debug)]
 pub struct Error {
-    pub kind:ErrorKind, 
-    pub message:String,
-    pub cause : Option<Box<dyn std::error::Error>>,
+    pub kind: ErrorKind,
+    pub message: String,
+    pub cause: Option<Box<dyn std::error::Error>>,
 }
 
 impl Error {
-    pub fn new(kind:ErrorKind,  message:String,cause : Option<Box<dyn std::error::Error>>) ->Self {
-        Self { kind,message,cause}
+    pub fn new(
+        kind: ErrorKind,
+        message: String,
+        cause: Option<Box<dyn std::error::Error>>,
+    ) -> Self {
+        Self {
+            kind,
+            message,
+            cause,
+        }
     }
 
-    pub fn with_cause(cause : Box<dyn std::error::Error>, kind:ErrorKind) -> Self {
+    pub fn with_cause(cause: Box<dyn std::error::Error>, kind: ErrorKind) -> Self {
         Self::new(kind, cause.to_string(), Some(cause))
     }
 }
 
-impl std::error::Error for Error{}
+impl std::error::Error for Error {}
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -40,6 +49,11 @@ impl From<sqlx::Error> for Error {
 impl From<config::ConfigError> for Error {
     fn from(e: config::ConfigError) -> Self {
         Self::with_cause(Box::new(e), ErrorKind::Config)
+    }
+}
+impl From<askama::Error> for Error {
+    fn from(e: askama::Error) -> Self {
+        Self::with_cause(Box::new(e), ErrorKind::Template)
     }
 }
 
