@@ -1,0 +1,38 @@
+{% extends "./base.html" %} {%block title%}SELECT IN{%endblock%} {%block
+content%}
+
+<div class="my-3">
+  <div class="my-3 bg-light p-3">
+    指定的条件：<code>id IN [{%for id in ids%}{{id}}, {%endfor%}]</code>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">名称</th>
+        <th scope="col">余额</th>
+        <th scope="col">类型</th>
+        <th scope="col">时间</th>
+        <th scope="col">已删除</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for m in data%}
+      <tr>
+        <th scope="row">{{ m.id }}</th>
+        <td>{{ m.name }}</td>
+        <td>{{ m.balance }}</td>
+        <td>{{ m.types }}</td>
+        <td>{{ m.dateline }}</td>
+        <td>
+          {% if m.is_del %}
+          <span class="badge text-bg-danger">是</span> {%else%}
+          <span class="badge text-bg-success">否</span> {%endif%}
+        </td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
+
+{%endblock%}

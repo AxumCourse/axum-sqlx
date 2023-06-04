@@ -28,3 +28,10 @@ pub struct Edit {
 #[derive(Template)]
 #[template(path = "tran.html")]
 pub struct Tran {}
+
+#[derive(Template)]
+#[template(path = "select_in.html")]
+pub struct SelectIn {
+    pub data: Vec<model::member::Member>,
+    pub ids: Vec<u32>,
+}

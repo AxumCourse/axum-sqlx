@@ -151,3 +151,18 @@ pub async fn tran(conn: &sqlx::MySqlPool, t: &model::member::Tran) -> Result<(u6
 
     Ok((from_aff, to_aff))
 }
+
+pub async fn select_in(conn: &sqlx::MySqlPool, ids: &[u32]) -> Result<Vec<model::member::Member>> {
+    let mut q = sqlx::QueryBuilder::new("SELECT * FROM member WHERE id IN");
+    q.push_tuples(ids.iter(), |mut b, id| {
+        b.push_bind(id);
+    });
+
+    let ms = q
+        .build_query_as()
+        .fetch_all(conn)
+        .await
+        .map_err(Error::from)?;
+
+    Ok(ms)
+}

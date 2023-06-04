@@ -27,6 +27,7 @@ async fn main() {
         .route("/del/:id", get(handler::del))
         .route("/real_del/:id", get(handler::real_del))
         .route("/tran", get(handler::tran_ui).post(handler::tran))
+        .route("/select_in", get(handler::select_in))
         .layer(Extension(Arc::new(AppState {
             pool: Arc::new(pool),
         })));

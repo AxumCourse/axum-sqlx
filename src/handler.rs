@@ -181,3 +181,16 @@ pub async fn tran(
 
     redirect("/?msg=转账成功")
 }
+
+pub async fn select_in(Extension(state): Extension<Arc<AppState>>) -> Result<Html<String>> {
+    let ids = vec![1, 3, 7, 8, 12, 30, 99];
+
+    let conn = get_conn(&state);
+
+    let data = member::select_in(&conn, &ids).await?;
+
+    let tpl = view::SelectIn { data, ids };
+    let html = tpl.render().map_err(Error::from)?;
+
+    Ok(Html(html))
+}
