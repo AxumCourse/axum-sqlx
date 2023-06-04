@@ -1,0 +1,50 @@
+{% extends "./base.html" %} {%block title%}修改{%endblock%} {%block content%}
+<form method="post" autocomplete="off" action="/edit/{{m.id}}">
+  <div class="mb-3">
+    <label for="name" class="form-label">会员名称</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      name="name"
+      value="{{m.name}}"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="balance" class="form-label">账户余额</label>
+    <input
+      type="number"
+      class="form-control"
+      id="balance"
+      name="balance"
+      value="{{m.balance}}"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="types" class="form-label">会员类型</label>
+    <select class="form-select" name="types" id="types">
+      {%match m.types %} {%when crate::model::member::MemberTypes::Normal%}
+      <option value="Normal" selected>普通会员</option>
+      {%else%}
+      <option value="Normal">普通会员</option>
+      {%endmatch%} {%match m.types %} {%when
+      crate::model::member::MemberTypes::Silver%}
+      <option value="Silver" selected>白银会员</option>
+      {%else%}
+      <option value="Silver">白银会员</option>
+      {%endmatch%} {%match m.types %} {%when
+      crate::model::member::MemberTypes::Gold%}
+      <option value="Gold" selected>黄金会员</option>
+      {%else%}
+      <option value="Gold">黄金会员</option>
+      {%endmatch%} {%match m.types %} {%when
+      crate::model::member::MemberTypes::Diamond%}
+      <option value="Diamond" selected>钻石会员</option>
+      {%else%}
+      <option value="Diamond">钻石会员</option>
+      {%endmatch%}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">提交</button>
+</form>
+{%endblock%}

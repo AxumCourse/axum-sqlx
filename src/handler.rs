@@ -31,6 +31,7 @@ fn redirect(url: &str) -> Result<(StatusCode, HeaderMap, ())> {
 #[derive(Deserialize)]
 pub struct PageQuery {
     pub page: Option<u32>,
+    pub msg: Option<String>,
 }
 
 pub async fn index(
@@ -41,7 +42,7 @@ pub async fn index(
 
     let p = member::list(&conn, q.page.unwrap_or(0)).await?;
 
-    let tpl = view::Home { p };
+    let tpl = view::Home { p, msg: q.msg };
     let html = tpl.render().map_err(Error::from)?;
     Ok(Html(html))
 }
@@ -73,7 +74,7 @@ pub async fn add_ui() -> Result<Html<String>> {
 
 pub async fn add(
     Extension(state): Extension<Arc<AppState>>,
-    Form(frm): Form<form::Add>,
+    Form(frm): Form<form::AddAndEdit>,
 ) -> Result<(StatusCode, HeaderMap, ())> {
     let conn = get_conn(&state);
 
@@ -96,5 +97,38 @@ pub async fn edit_ui(
     Extension(state): Extension<Arc<AppState>>,
     Path(id): Path<u32>,
 ) -> Result<Html<String>> {
-    unimplemented!()
+    let conn = get_conn(&state);
+
+    let m = member::find(&conn, id).await?;
+
+    match m {
+        Some(m) => {
+            let tpl = view::Edit { m };
+            let html = tpl.render().map_err(Error::from)?;
+            Ok(Html(html))
+        }
+        None => Err(Error::not_found("不存在的会员")),
+    }
+}
+
+pub async fn edit(
+    Extension(state): Extension<Arc<AppState>>,
+    Path(id): Path<u32>,
+    Form(frm): Form<form::AddAndEdit>,
+) -> Result<(StatusCode, HeaderMap, ())> {
+    let conn = get_conn(&state);
+
+    member::edit(
+        &conn,
+        &model::member::Member {
+            id,
+            name: frm.name,
+            balance: frm.balance,
+            types: frm.types,
+            ..Default::default()
+        },
+    )
+    .await?;
+
+    redirect("/?msg=会员修改成功")
 }

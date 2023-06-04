@@ -76,9 +76,10 @@ pub async fn edit(conn: &sqlx::MySqlPool, m: &model::member::Member) -> Result<u
         return Err(Error::exists("同名的会员已存在"));
     }
 
-    let aff = sqlx::query("UPDATE `member` SET name=?,balance=? WHERE id=?")
+    let aff = sqlx::query("UPDATE `member` SET name=?,balance=?,types=? WHERE id=?")
         .bind(&m.name)
         .bind(&m.balance)
+        .bind(&m.types)
         .bind(&m.id)
         .execute(conn)
         .await

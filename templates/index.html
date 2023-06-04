@@ -1,30 +1,37 @@
 {% extends "./base.html" %} {%block title%}列表{%endblock%} {%block content%}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">名称</th>
-      <th scope="col">余额</th>
-      <th scope="col">类型</th>
-      <th scope="col">时间</th>
-      <th scope="col">操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {%for m in p.data%}
-    <tr>
-      <th scope="row">{{ m.id }}</th>
-      <td>{{ m.name }}</td>
-      <td>{{ m.balance }}</td>
-      <td>{{ m.types }}</td>
-      <td>{{ m.dateline }}</td>
-      <td>
-        <a class="btn btn-primary btn-sm" href="/detail/{{m.id}}">详情</a>
-      </td>
-    </tr>
-    {%endfor%}
-  </tbody>
-</table>
+{%match msg%} {%when Some with (msg)%}
+<div class="alert alert-success" role="alert">{{msg}}</div>
+{%when None%} {%endmatch%}
+
+<div class="my-3">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">名称</th>
+        <th scope="col">余额</th>
+        <th scope="col">类型</th>
+        <th scope="col">时间</th>
+        <th scope="col">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for m in p.data%}
+      <tr>
+        <th scope="row">{{ m.id }}</th>
+        <td>{{ m.name }}</td>
+        <td>{{ m.balance }}</td>
+        <td>{{ m.types }}</td>
+        <td>{{ m.dateline }}</td>
+        <td>
+          <a class="btn btn-primary btn-sm" href="/detail/{{m.id}}">详情</a>
+          <a class="btn btn-primary btn-sm" href="/edit/{{m.id}}">修改</a>
+        </td>
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
 
 {% if p.total_page > 0 %}
 <nav>

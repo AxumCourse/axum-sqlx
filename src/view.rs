@@ -6,6 +6,7 @@ use crate::{db::Paginate, model};
 #[template(path = "index.html")]
 pub struct Home {
     pub p: Paginate<Vec<model::member::Member>>,
+    pub msg: Option<String>,
 }
 
 #[derive(Template)]
@@ -17,3 +18,9 @@ pub struct Detail {
 #[derive(Template)]
 #[template(path = "add.html")]
 pub struct Add {}
+
+#[derive(Template)]
+#[template(path = "edit.html")]
+pub struct Edit {
+    pub m: model::member::Member,
+}
