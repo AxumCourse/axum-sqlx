@@ -108,3 +108,44 @@ pub async fn real_del(conn: &sqlx::MySqlPool, id: u32) -> Result<u64> {
         .rows_affected();
     Ok(aff)
 }
+
+pub async fn tran(conn: &sqlx::MySqlPool, t: &model::member::Tran) -> Result<(u64, u64)> {
+    let mut tx = conn.begin().await.map_err(Error::from)?;
+
+    let from_aff =
+        match sqlx::query("UPDATE member SET balance=balance-? WHERE name=? AND balance>=?")
+            .bind(&t.amount)
+            .bind(&t.from_member)
+            .bind(&t.amount)
+            .execute(&mut tx)
+            .await
+        {
+            Ok(r) => r.rows_affected(),
+            Err(err) => {
+                tx.rollback().await.map_err(Error::from)?;
+                return Err(Error::from(err));
+            }
+        };
+
+    if from_aff < 1 {
+        tx.rollback().await.map_err(Error::from)?;
+        return Err(Error::tran("转账失败，请检查转出账户是否有足够余额"));
+    }
+
+    let to_aff = match sqlx::query("UPDATE member SET balance=balance+? WHERE name=?")
+        .bind(&t.amount)
+        .bind(&t.to_member)
+        .execute(&mut tx)
+        .await
+    {
+        Ok(r) => r.rows_affected(),
+        Err(err) => {
+            tx.rollback().await.map_err(Error::from)?;
+            return Err(Error::from(err));
+        }
+    };
+
+    tx.commit().await.map_err(Error::from)?;
+
+    Ok((from_aff, to_aff))
+}

@@ -7,6 +7,7 @@ pub enum ErrorKind {
     Template,
     NotFound,
     Exists,
+    Tran,
 }
 
 #[derive(Debug)]
@@ -39,6 +40,10 @@ impl Error {
 
     pub fn exists(msg: &str) -> Self {
         Self::new(ErrorKind::Exists, msg.to_string(), None)
+    }
+
+    pub fn tran(msg: &str) -> Self {
+        Self::new(ErrorKind::Tran, msg.to_string(), None)
     }
 }
 

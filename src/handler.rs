@@ -154,3 +154,30 @@ pub async fn real_del(
 
     redirect("/?msg=物理删除成功")
 }
+
+pub async fn tran_ui() -> Result<Html<String>> {
+    let tpl = view::Tran {};
+    let html = tpl.render().map_err(Error::from)?;
+    Ok(Html(html))
+}
+
+pub async fn tran(
+    Extension(state): Extension<Arc<AppState>>,
+    Form(frm): Form<form::Tran>,
+) -> Result<(StatusCode, HeaderMap, ())> {
+    let conn = get_conn(&state);
+
+    let affs = member::tran(
+        &conn,
+        &model::member::Tran {
+            from_member: frm.from_member,
+            to_member: frm.to_member,
+            amount: frm.amount,
+        },
+    )
+    .await?;
+
+    tracing::debug!("{:?}", affs);
+
+    redirect("/?msg=转账成功")
+}

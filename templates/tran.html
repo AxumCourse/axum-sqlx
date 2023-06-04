@@ -2,18 +2,30 @@
 <form method="post" autocomplete="off" action="/tran">
   <div class="mb-3">
     <label for="from_member" class="form-label">转账人</label>
-    <select class="form-select" name="from_member"></select>
+    <input
+      type="text"
+      class="form-control"
+      id="from_member"
+      name="from_member"
+      placeholder="输入转账人的会员名称，比如：张三"
+    />
   </div>
 
   <div class="mb-3">
     <label for="to_member" class="form-label">收款人</label>
-    <select class="form-select" name="to_member"></select>
+    <input
+      type="text"
+      class="form-control"
+      id="to_member"
+      name="to_member"
+      placeholder="输入收款人的会员名称，比如：李四"
+    />
   </div>
 
   <div class="mb-3">
     <label for="amount" class="form-label">转账金额</label>
-    <input type="number" class="form-control" id="amount" />
+    <input type="number" class="form-control" id="amount" name="amount" />
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">提交</button>
 </form>
 {%endblock%}

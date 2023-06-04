@@ -24,3 +24,7 @@ pub struct Add {}
 pub struct Edit {
     pub m: model::member::Member,
 }
+
+#[derive(Template)]
+#[template(path = "tran.html")]
+pub struct Tran {}

@@ -8,3 +8,10 @@ pub struct AddAndEdit {
     pub balance: u32,
     pub types: MemberTypes,
 }
+
+#[derive(Deserialize)]
+pub struct Tran {
+    pub from_member: String,
+    pub to_member: String,
+    pub amount: u32,
+}

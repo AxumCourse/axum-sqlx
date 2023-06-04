@@ -34,3 +34,9 @@ pub struct Member {
     pub types: MemberTypes,
     pub is_del: bool,
 }
+
+pub struct Tran {
+    pub from_member: String,
+    pub to_member: String,
+    pub amount: u32,
+}

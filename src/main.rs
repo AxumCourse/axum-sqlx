@@ -26,6 +26,7 @@ async fn main() {
         .route("/edit/:id", get(handler::edit_ui).post(handler::edit))
         .route("/del/:id", get(handler::del))
         .route("/real_del/:id", get(handler::real_del))
+        .route("/tran", get(handler::tran_ui).post(handler::tran))
         .layer(Extension(Arc::new(AppState {
             pool: Arc::new(pool),
         })));
