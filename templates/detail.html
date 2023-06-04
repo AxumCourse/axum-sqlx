@@ -1,0 +1,25 @@
+{% extends "./base.html" %} {%block title%}详情{%endblock%} {%block content%}
+
+<table class="table">
+  <tr>
+    <th>会员名称</th>
+    <td>{{m.name}}</td>
+  </tr>
+  <tr>
+    <th>账户余额</th>
+    <td>{{m.balance}}</td>
+  </tr>
+  <tr>
+    <th>会员类型</th>
+    <td>{{m.types}}</td>
+  </tr>
+  <tr>
+    <th>加入时间</th>
+    <td>{{m.dateline}}</td>
+  </tr>
+</table>
+
+<div class="my-3 text-center">
+  <button class="btn btn-primary" onclick="history.back()">返回</button>
+</div>
+{%endblock%}

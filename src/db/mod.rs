@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::{err::Error, model, Result};
+pub mod member;
 
 const DEFAULT_PAGE_SIZE: u32 = 30;
 #[derive(Serialize)]
@@ -27,28 +27,9 @@ impl<T: Serialize> Paginate<T> {
         self.page > 0
     }
     pub fn has_next(&self) -> bool {
-        self.page < self.total_page - 1
+        self.page < self.last_page()
     }
-}
-
-pub async fn list(
-    conn: &sqlx::MySqlPool,
-    page: u32,
-) -> Result<Paginate<Vec<model::member::Member>>> {
-    let count: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM member")
-        .fetch_one(conn)
-        .await
-        .map_err(Error::from)?;
-
-    let sql = format!(
-        "SELECT * FROM member ORDER BY id DESC LIMIT {} OFFSET {}",
-        DEFAULT_PAGE_SIZE,
-        page * DEFAULT_PAGE_SIZE
-    );
-    let data = sqlx::query_as(&sql)
-        .fetch_all(conn)
-        .await
-        .map_err(Error::from)?;
-
-    Ok(Paginate::new(count.0 as u32, page, data))
+    pub fn last_page(&self) -> u32 {
+        self.total_page - 1
+    }
 }

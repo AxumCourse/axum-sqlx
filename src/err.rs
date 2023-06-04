@@ -5,6 +5,7 @@ pub enum ErrorKind {
     Database,
     Config,
     Template,
+    NotFound,
 }
 
 #[derive(Debug)]
@@ -29,6 +30,10 @@ impl Error {
 
     pub fn with_cause(cause: Box<dyn std::error::Error>, kind: ErrorKind) -> Self {
         Self::new(kind, cause.to_string(), Some(cause))
+    }
+
+    pub fn not_found(msg: &str) -> Self {
+        Self::new(ErrorKind::NotFound, msg.to_string(), None)
     }
 }
 

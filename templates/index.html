@@ -18,28 +18,36 @@
       <td>{{ m.balance }}</td>
       <td>{{ m.types }}</td>
       <td>{{ m.dateline }}</td>
-      <td></td>
+      <td>
+        <a class="btn btn-primary btn-sm" href="/detail/{{m.id}}">详情</a>
+      </td>
     </tr>
     {%endfor%}
   </tbody>
 </table>
 
 {% if p.total_page > 0 %}
-<nav aria-label="Page navigation example">
+<nav>
   <ul class="pagination">
-    {%if p.has_prev()%}
     <li class="page-item">
+      {%if p.has_prev()%}
       <a class="page-link" href="?page={{p.page-1}}">上一页</a>
+      {%else%}
+      <a class="page-link" href="?page=0">上一页</a>
+      {%endif%}
     </li>
-    {%endif%} {%for i in 0..p.total_page%}
-    <li class="page-item">
+    {%for i in 0..p.total_page%}
+    <li class="page-item{%if p.page==i%} active{%endif%}">
       <a class="page-link" href="?page={{i}}">{{i+1}}</a>
     </li>
-    {%endfor%} {%if p.has_next()%}
+    {%endfor%}
     <li class="page-item">
+      {%if p.has_next()%}
       <a class="page-link" href="?page={{p.page+1}}">下一页</a>
+      {%else%}
+      <a class="page-link" href="?page={{p.last_page()}}">下一页</a>
+      {%endif%}
     </li>
-    {%endif%}
   </ul>
 </nav>
 {%endif%} {%endblock%}
