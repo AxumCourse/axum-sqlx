@@ -11,12 +11,14 @@ pub async fn list(
         .await
         .map_err(Error::from)?;
 
-    let sql = format!(
-        "SELECT * FROM member ORDER BY id DESC LIMIT {} OFFSET {}",
-        DEFAULT_PAGE_SIZE,
-        page * DEFAULT_PAGE_SIZE
-    );
-    let data = sqlx::query_as(&sql)
+    let mut q = sqlx::QueryBuilder::new("SELECT * FROM member ORDER BY id DESC");
+    q.push(" LIMIT ")
+        .push_bind(DEFAULT_PAGE_SIZE)
+        .push(" OFFSET ")
+        .push_bind(page * DEFAULT_PAGE_SIZE);
+
+    let data = q
+        .build_query_as()
         .fetch_all(conn)
         .await
         .map_err(Error::from)?;
