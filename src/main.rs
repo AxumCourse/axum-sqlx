@@ -22,6 +22,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(handler::index))
         .route("/detail/:id", get(handler::detail))
+        .route("/add", get(handler::add_ui).post(handler::add))
         .layer(Extension(Arc::new(AppState {
             pool: Arc::new(pool),
         })));

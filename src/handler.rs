@@ -2,16 +2,30 @@ use std::sync::Arc;
 
 use axum::{
     extract::{Path, Query},
+    http::{header, HeaderMap, StatusCode},
     response::Html,
-    Extension,
+    Extension, Form,
 };
 use serde::Deserialize;
 
-use crate::{db::member, err::Error, model::state::AppState, view, Result};
+use crate::{
+    db::member,
+    err::Error,
+    form,
+    model::{self, state::AppState},
+    view, Result,
+};
 use askama::Template;
 
 fn get_conn(state: &AppState) -> Arc<sqlx::MySqlPool> {
     state.pool.clone()
+}
+
+fn redirect(url: &str) -> Result<(StatusCode, HeaderMap, ())> {
+    let mut header = HeaderMap::new();
+    header.insert(header::LOCATION, url.parse().unwrap());
+
+    Ok((StatusCode::FOUND, header, ()))
 }
 
 #[derive(Deserialize)]
@@ -48,4 +62,39 @@ pub async fn detail(
         }
         None => Err(Error::not_found("不存在的会员")),
     }
+}
+
+pub async fn add_ui() -> Result<Html<String>> {
+    let tpl = view::Add {};
+    let html = tpl.render().map_err(Error::from)?;
+
+    Ok(Html(html))
+}
+
+pub async fn add(
+    Extension(state): Extension<Arc<AppState>>,
+    Form(frm): Form<form::Add>,
+) -> Result<(StatusCode, HeaderMap, ())> {
+    let conn = get_conn(&state);
+
+    member::add(
+        &conn,
+        &model::member::Member {
+            name: frm.name,
+            balance: frm.balance,
+            types: frm.types,
+            dateline: chrono::Local::now(),
+            ..Default::default()
+        },
+    )
+    .await?;
+
+    redirect("/?msg=会员添加成功")
+}
+
+pub async fn edit_ui(
+    Extension(state): Extension<Arc<AppState>>,
+    Path(id): Path<u32>,
+) -> Result<Html<String>> {
+    unimplemented!()
 }

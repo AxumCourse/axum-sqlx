@@ -13,3 +13,7 @@ pub struct Home {
 pub struct Detail {
     pub m: model::member::Member,
 }
+
+#[derive(Template)]
+#[template(path = "add.html")]
+pub struct Add {}
