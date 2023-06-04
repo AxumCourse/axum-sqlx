@@ -132,3 +132,25 @@ pub async fn edit(
 
     redirect("/?msg=会员修改成功")
 }
+
+pub async fn del(
+    Extension(state): Extension<Arc<AppState>>,
+    Path(id): Path<u32>,
+) -> Result<(StatusCode, HeaderMap, ())> {
+    let conn = get_conn(&state);
+
+    member::del(&conn, id).await?;
+
+    redirect("/?msg=逻辑删除成功")
+}
+
+pub async fn real_del(
+    Extension(state): Extension<Arc<AppState>>,
+    Path(id): Path<u32>,
+) -> Result<(StatusCode, HeaderMap, ())> {
+    let conn = get_conn(&state);
+
+    member::real_del(&conn, id).await?;
+
+    redirect("/?msg=物理删除成功")
+}

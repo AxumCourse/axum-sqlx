@@ -12,6 +12,7 @@
         <th scope="col">余额</th>
         <th scope="col">类型</th>
         <th scope="col">时间</th>
+        <th scope="col">已删除</th>
         <th scope="col">操作</th>
       </tr>
     </thead>
@@ -24,8 +25,41 @@
         <td>{{ m.types }}</td>
         <td>{{ m.dateline }}</td>
         <td>
-          <a class="btn btn-primary btn-sm" href="/detail/{{m.id}}">详情</a>
+          {% if m.is_del %}
+          <span class="badge text-bg-danger">是</span> {%else%}
+          <span class="badge text-bg-success">否</span> {%endif%}
+        </td>
+        <td>
+          <a class="btn btn-secondary btn-sm" href="/detail/{{m.id}}">详情</a>
           <a class="btn btn-primary btn-sm" href="/edit/{{m.id}}">修改</a>
+          <div class="btn-group btn-group-sm" role="group">
+            <button
+              type="button"
+              class="btn btn-danger dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              删除
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="/del/{{m.id}}"
+                  onclick="if(!confirm('确定删除？')){return false;}"
+                  >逻辑删除</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="/real_del/{{m.id}}"
+                  onclick="if(!confirm('确定删除？')){return false;}"
+                  >物理删除</a
+                >
+              </li>
+            </ul>
+          </div>
         </td>
       </tr>
       {%endfor%}
