@@ -36,18 +36,18 @@ pub async fn find(conn: &sqlx::MySqlPool, id: u32) -> Result<Option<model::membe
 }
 
 pub async fn exists(conn: &sqlx::MySqlPool, name: &str, id: Option<u32>) -> Result<bool> {
-    let sql = "SELECT COUNT(*) FROM member WHERE name=?";
-    let with_id_sql: String;
+    let mut q = sqlx::QueryBuilder::new("SELECT COUNT(*) FROM member WHERE name=");
+    q.push_bind(name);
 
-    let q = match id {
-        Some(id) => {
-            with_id_sql = format!("{} AND id<>?", sql);
-            sqlx::query_as(&with_id_sql).bind(&name).bind(id)
-        }
-        None => sqlx::query_as(sql).bind(&name),
+    if let Some(id) = id {
+        q.push(" AND id<>").push_bind(id);
     };
 
-    let count: (i64,) = q.fetch_one(conn).await.map_err(Error::from)?;
+    let count: (i64,) = q
+        .build_query_as()
+        .fetch_one(conn)
+        .await
+        .map_err(Error::from)?;
 
     Ok(count.0 > 0)
 }
